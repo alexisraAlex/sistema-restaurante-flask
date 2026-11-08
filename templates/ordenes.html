@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-5">
+        <form method="POST" class="card p-3 shadow">
+            <h5>Nueva Orden</h5>
+            <select name="client_id" id="sel-cli" class="form-select mb-2" required>
+                <option value="">-- Seleccionar Cliente --</option>
+                {% for c in clientes %}
+                <option value="{{c.id}}" data-lat="{{c.lat}}" data-lng="{{c.lng}}">{{c.name}}</option>
+                {% endfor %}
+            </select>
+            <input type="text" id="busqueda" name="plato" class="form-control mb-1" placeholder="Buscar plato...">
+            <div id="sugerencias" class="list-group mb-3"></div>
+            <button type="submit" class="btn btn-primary">Registrar Orden</button>
+        </form>
+    </div>
+    <div class="col-md-7">
+        <div id="map" style="height: 400px;" class="rounded shadow"></div>
+    </div>
+</div>
+
+<script>
+    var map = L.map('map').setView([8.98, -79.51], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    var marker;
+
+    document.getElementById('sel-cli').onchange = function() {
+        var opt = this.options[this.selectedIndex];
+        if(!opt.dataset.lat) return;
+        if(marker) map.removeLayer(marker);
+        marker = L.marker([opt.dataset.lat, opt.dataset.lng]).addTo(map).bindPopup(opt.text).openPopup();
+        map.setView([opt.dataset.lat, opt.dataset.lng], 14);
+    };
+
+    document.getElementById('busqueda').oninput = async (e) => {
+        if(e.target.value.length > 2) {
+            const r = await fetch(`/api/sugerencias?query=${e.target.value}`);
+            const data = await r.json();
+            document.getElementById('sugerencias').innerHTML = data.map(i => 
+                `<button type="button" onclick="document.getElementById('busqueda').value='${i.title}'" class="list-group-item list-group-item-action">${i.title}</button>`
+            ).join('');
+        }
+    };
+</script>
+{% endblock %}

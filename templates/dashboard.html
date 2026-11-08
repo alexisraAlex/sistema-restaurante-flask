@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Dashboard de Inteligencia</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">Ingresos por Cliente</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                {% for nombre, total in ventas %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {{ nombre }} <strong>${{ "%.2f"|format(total) }}</strong>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white">Top Platos (Más Vendidos)</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                {% for plato, cantidad in platos %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        {{ plato }} <span class="badge bg-secondary rounded-pill">{{ cantidad }} vendidos</span>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header bg-warning text-dark">Órdenes Pendientes de Entrega</div>
+    <div class="table-responsive">
+        <table class="table mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pendientes %}
+                <tr>
+                    <td>#{{ p.id }}</td>
+                    <td>{{ p.client.name }}</td>
+                    <td>${{ p.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

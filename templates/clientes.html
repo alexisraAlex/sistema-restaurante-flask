@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card p-4 shadow mx-auto" style="max-width: 500px;">
+    <h4>Registrar Cliente</h4>
+    <form method="POST">
+        <input type="text" name="nombre" class="form-control mb-2" placeholder="Nombre" required>
+        <input type="text" name="direccion" class="form-control mb-2" placeholder="Dirección" required>
+        <div class="row mb-3">
+            <div class="col"><input type="number" step="any" name="lat" class="form-control" value="8.98"></div>
+            <div class="col"><input type="number" step="any" name="lng" class="form-control" value="-79.51"></div>
+        </div>
+        <button type="submit" class="btn btn-success w-100">Guardar</button>
+    </form>
+</div>
+{% endblock %}

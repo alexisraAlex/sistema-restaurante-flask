@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+    <h2>Listado de Órdenes</h2>
+    <a href="/ordenes" class="btn btn-primary">+ Nueva Orden</a>
+</div>
+
+<table class="table table-hover shadow-sm bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in ordenes %}
+        <tr>
+            <td>#{{ o.id }}</td>
+            <td>{{ o.client.name }}</td>
+            <td>{{ o.date }}</td>
+            <td>
+                <span class="badge {% if o.status == 'Pendiente' %}bg-danger{% else %}bg-success{% endif %}">
+                    {{ o.status }}
+                </span>
+            </td>
+            <td>
+                {% if o.status == 'Pendiente' %}
+                <a href="{{ url_for('entregar_orden', id=o.id) }}" class="btn btn-sm btn-success">Entregar</a>
+                {% else %}
+                <small class="text-muted">Finalizada</small>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
